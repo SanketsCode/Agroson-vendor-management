@@ -1,118 +1,686 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import axios from "axios";
 
-const inter = Inter({ subsets: ['latin'] })
+import React, { useContext, useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { BusinessCategory } from "../documents/BusinessCategory.json";
 
-export default function Home() {
-  return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">pages/index.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+import { countries } from "../documents/country-state.json";
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+import Loader from "@/layout/Loader";
+import ServiceCard from "@/components/serviceCard";
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+interface ServiceType {
+  service_name: string;
+  rate: string;
 }
+
+interface MachineType {
+  Machine_name: string;
+  rate: string;
+}
+
+const Register = () => {
+  const [country, setCountry] = useState<string[] | []>([]);
+  const [state, setState] = useState<string[] | []>([]);
+  const [categories, setCategories] = useState<string[] | []>([]);
+  const [subCategories, setSubCategories] = useState<string[] | []>([]);
+  const [lat, setLat] = useState<number>(0);
+  const [lon, setLon] = useState<number>(0);
+  const [loading, setLoading] = useState(false);
+  const [services, setServices] = useState<ServiceType[] | []>([]);
+  const [serviceName, setServiceName] = useState("");
+  const [serviceRate, setServiceRate] = useState("");
+  const [machineryName, setMachineryName] = useState("");
+  const [machineryRate, setMachineryRate] = useState("");
+  const [machines, setMachines] = useState<MachineType[] | []>([]);
+
+  const [inputFields, setInputFields] = useState({
+    name: "",
+    email: "",
+    alternative_phone: "",
+    contact: "",
+    village: "",
+    taluka: "",
+    dist: "",
+    pincode: "",
+    state: "",
+    country: "",
+    machinery: machines,
+    services: services,
+    ServiceCategory: "",
+    ServiceSubCategory: "",
+  });
+
+  const handleInputChange = (
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    setInputFields({ ...inputFields, [name]: value });
+  };
+
+  const handleFilterState = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setState([]);
+    const data = countries.find(({ country }) => {
+      if (event.target.value == country) {
+        return country;
+      }
+    });
+    if (data) {
+      const result = data.states.map((state) => {
+        return state;
+      });
+      setState(result);
+    }
+  };
+
+  // for services
+  const handleServices = () => {
+    if (serviceName == "" || serviceRate == "") {
+      toast.error("Fill All Field for Service");
+      return;
+    }
+
+    // if (inputFields.state == "") {
+    //   toast.error("State is not selected");
+    //   return;
+    // }
+
+    // if (inputFields.country == "") {
+    //   toast.error("country is missing");
+    //   return;
+    // }
+
+    const service = {
+      service_name: serviceName,
+      rate: serviceRate,
+    };
+
+    setServices([...services, service]);
+    setServiceName("");
+    setServiceRate("");
+  };
+
+  const deleteService = (service_name: string) => {
+    const filteredServices = services.filter(
+      (data) => data.service_name !== service_name
+    );
+    setServices(filteredServices);
+  };
+
+  // for machineries
+  const handleMachines = () => {
+    if (machineryName == "" || machineryRate == "") {
+      toast.error("Fill All Field for Machines");
+      return;
+    }
+    const machine = {
+      Machine_name: machineryName,
+      rate: machineryRate,
+    };
+
+    setMachines([...machines, machine]);
+    setMachineryName("");
+    setMachineryRate("");
+  };
+
+  const deleteMachine = (machine_name: string) => {
+    const filteredMachines = machines.filter(
+      (data) => data.Machine_name !== machine_name
+    );
+    setMachines(filteredMachines);
+  };
+
+  const handleFilterSubCategory = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSubCategories([]);
+    const data = BusinessCategory.find(({ category }) => {
+      if (event.target.value == category) {
+        return category;
+      }
+    });
+    if (data) {
+      const result = data.subCategory.map((sub) => {
+        return sub;
+      });
+
+      setSubCategories(result);
+    }
+  };
+
+  useEffect(() => {
+    const data = countries.map(({ country }) => {
+      return country;
+    });
+    setCountry(data);
+
+    const myCategories = BusinessCategory.map(({ category }) => {
+      return category;
+    });
+    setCategories(myCategories);
+
+    navigator.geolocation.getCurrentPosition(function (position) {
+      setLat(position.coords.latitude);
+      setLon(position.coords.longitude);
+    });
+  }, []);
+
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setLoading(true);
+
+    if (services.length) {
+      inputFields.services = services;
+    }
+
+    if (machines.length) {
+      inputFields.machinery = machines;
+    }
+
+    if (inputFields.state == "") {
+      toast.error("State is Missing");
+      return;
+    }
+
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_API_PREFIX}/api/v1/vendor/register`, {
+        lat,
+        long: lon,
+        ...inputFields,
+      })
+      .then((response) => {
+        // console.log(response);
+        if (response.status == 200) {
+          toast.success("Vendor Created Successfully");
+          setServices([]);
+          setMachines([]);
+
+          setInputFields({
+            name: "",
+            email: "",
+            alternative_phone: "",
+            contact: "",
+            village: "",
+            taluka: "",
+            dist: "",
+            pincode: "",
+            state: "",
+            country: "",
+            machinery: machines,
+            services: services,
+            ServiceCategory: "",
+            ServiceSubCategory: "",
+          });
+        }
+      })
+      .catch((error) => {
+        toast.error("Email and Number Already exist");
+      });
+
+    setLoading(false);
+  };
+
+  return (
+    <React.Fragment>
+      <section className="md:py-20 sm:p-0">
+        <div className="md:container sm:w-full">
+          <form onSubmit={(event) => handleFormSubmit(event)}>
+            <div className="md:w-full sm:w-full md:mx-auto md:py-2">
+              <figure className="bg-white p-8 flex flex-col space-y-3 shadow-lg">
+                <img src="/assets/logo-dark.png" />
+                <div>
+                  <h1 className="font-semibold text-2xl mb-2">
+                    Register as a Vendor
+                  </h1>
+                  <p className="text-xs text-slate-600 mb-6">
+                    Please fill the required fields to create a designer account
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-6">
+                  <div className="md:col-span-2 sm:col-span-1">
+                    <br />
+                    <h1 className="font-semibold text-lg mb-2">
+                      Personal Information
+                    </h1>
+                    <hr />
+                  </div>
+
+                  {/* Name */}
+                  <div className="flex flex-col">
+                    <label htmlFor="name" className="input-label">
+                      Your name*
+                    </label>
+                    <input
+                      type="text"
+                      value={inputFields.name}
+                      onChange={(event) => handleInputChange(event)}
+                      name="name"
+                      className="input-box"
+                      placeholder="Enter name"
+                      required
+                    />
+                  </div>
+
+                  {/* Email address */}
+                  <div className="flex flex-col">
+                    <label htmlFor="email" className="input-label">
+                      Email address
+                    </label>
+                    <input
+                      type="email"
+                      value={inputFields.email}
+                      onChange={(event) => handleInputChange(event)}
+                      name="email"
+                      className="input-box"
+                      placeholder="Enter email"
+                    />
+                  </div>
+
+                  {/* Phone Primary */}
+                  <div className="flex flex-col">
+                    <label htmlFor="primaryPhone" className="input-label">
+                      Contact*
+                    </label>
+                    <input
+                      type="number"
+                      value={inputFields.contact}
+                      onChange={(event) => handleInputChange(event)}
+                      name="contact"
+                      className="input-box"
+                      placeholder="Enter phone"
+                      required
+                    />
+                  </div>
+
+                  {/* Phone Primary */}
+                  <div className="flex flex-col">
+                    <label htmlFor="primaryPhone" className="input-label">
+                      Secondary Phone
+                    </label>
+                    <input
+                      type="number"
+                      value={inputFields.alternative_phone}
+                      onChange={(event) => handleInputChange(event)}
+                      name="alternative_phone"
+                      className="input-box"
+                      placeholder="Enter phone"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2 sm:col-span-1">
+                    <br />
+                    <h1 className="font-semibold text-lg mb-2">
+                      Address Information
+                    </h1>
+                    <hr />
+                  </div>
+
+                  {/* Street */}
+                  <div className="flex flex-col">
+                    <label htmlFor="street" className="input-label">
+                      Village*
+                    </label>
+                    <input
+                      type="text"
+                      value={inputFields.village}
+                      onChange={(event) => handleInputChange(event)}
+                      name="village"
+                      className="input-box"
+                      placeholder="Enter village / area / locality"
+                      required
+                    />
+                  </div>
+
+                  {/* dist */}
+                  <div className="flex flex-col">
+                    <label htmlFor="city" className="input-label">
+                      District*
+                    </label>
+                    <input
+                      type="text"
+                      value={inputFields.dist}
+                      onChange={(event) => handleInputChange(event)}
+                      name="dist"
+                      className="input-box"
+                      placeholder="Enter District"
+                      required
+                    />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="city" className="input-label">
+                      Taluka*
+                    </label>
+                    <input
+                      type="text"
+                      value={inputFields.taluka}
+                      onChange={(event) => handleInputChange(event)}
+                      name="taluka"
+                      className="input-box"
+                      placeholder="Enter Taluka"
+                      required
+                    />
+                  </div>
+
+                  {/* Pincode */}
+                  <div className="flex flex-col">
+                    <label htmlFor="pincode" className="input-label">
+                      Pincode*
+                    </label>
+                    <input
+                      type="text"
+                      value={inputFields.pincode}
+                      onChange={(event) => handleInputChange(event)}
+                      name="pincode"
+                      className="input-box"
+                      placeholder="Enter pincode"
+                      required
+                    />
+                  </div>
+
+                  {/* Country */}
+                  <div className="flex flex-col">
+                    <label htmlFor="country" className="input-label">
+                      Country*
+                    </label>
+                    <select
+                      name="country"
+                      className="input-box"
+                      onChange={(event) => {
+                        handleFilterState(event);
+                        handleInputChange(event);
+                      }}
+                      id="country"
+                      required
+                    >
+                      <option value="">Select Country</option>
+                      {country.map((item, index) => {
+                        return (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  {/* State */}
+                  <div className="flex flex-col">
+                    <label htmlFor="state" className="input-label">
+                      State*
+                    </label>
+                    <select
+                      name="state"
+                      className="input-box"
+                      onChange={(event) => handleInputChange(event)}
+                      id="state"
+                      required
+                    >
+                      <option value="">Select State</option>
+                      {state.map((item, index) => {
+                        return (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  {/* Select Service  */}
+                  <div className="md:col-span-2 sm:col-span-1">
+                    <br />
+                    <h1 className="font-semibold text-lg mb-2">
+                      Service Information
+                    </h1>
+                    <hr />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="BusinessCategory" className="input-label">
+                      Select Category*
+                    </label>
+                    <select
+                      name="ServiceCategory"
+                      className="input-box"
+                      id="ServiceCategory"
+                      onChange={(event) => {
+                        handleFilterSubCategory(event);
+                        handleInputChange(event);
+                      }}
+                    >
+                      <option value="">Select Category</option>
+                      {categories.map((item, index) => {
+                        return (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="BusinessCategory" className="input-label">
+                      Select subCategory*
+                    </label>
+                    <select
+                      name="ServiceSubCategory"
+                      className="input-box"
+                      id="ServiceSubCategory"
+                      onChange={(event) => {
+                        handleInputChange(event);
+                      }}
+                    >
+                      <option value="">Select SubCategory</option>
+                      {subCategories.map((item, index) => {
+                        return (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  {/* Services  */}
+                  <div className="md:col-span-2 sm:col-span-1">
+                    <br />
+                    <div className="my-2">
+                      <h1 className="font-semibold text-lg ">
+                        Add Other Services
+                      </h1>
+                      <p className="text-[10px]">You Can add Service here</p>
+                    </div>
+                    <hr />
+                  </div>
+
+                  {services.length > 0 &&
+                    services.map((data) => (
+                      <ServiceCard
+                        key={data.service_name}
+                        serviceName={data.service_name}
+                        handleDelete={deleteService}
+                        serviceRate={data.rate}
+                      />
+                    ))}
+
+                  <div className="flex flex-col">
+                    <label htmlFor="name" className="input-label">
+                      Service Name
+                    </label>
+                    <input
+                      type="text"
+                      value={serviceName}
+                      onChange={(event) => setServiceName(event.target.value)}
+                      name="name"
+                      className="input-box"
+                      placeholder="Enter Service Name"
+                    />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="BusinessName" className="input-label">
+                      Service Rate
+                    </label>
+                    <input
+                      type="text"
+                      value={serviceRate}
+                      onChange={(event) => setServiceRate(event.target.value)}
+                      name="name"
+                      className="input-box"
+                      placeholder="Enter Rate"
+                    />
+                  </div>
+
+                  <div
+                    className="btn-theme-5 md:w-[25%] w-full"
+                    onClick={handleServices}
+                  >
+                    <span className="w-full">Add Service</span>
+                  </div>
+
+                  {/* Machinery  */}
+                  <div className="md:col-span-2 sm:col-span-1">
+                    <br />
+                    <div className="my-2">
+                      <h1 className="font-semibold text-lg ">
+                        Add Machineries
+                      </h1>
+                      <p className="text-[10px]">
+                        You Can add Machineries here
+                      </p>
+                    </div>
+                    <hr />
+                  </div>
+
+                  {machines.length > 0 &&
+                    machines.map((data) => (
+                      <ServiceCard
+                        key={data.Machine_name}
+                        serviceName={data.Machine_name}
+                        handleDelete={deleteMachine}
+                        serviceRate={data.rate}
+                      />
+                    ))}
+
+                  <div className="flex flex-col">
+                    <label htmlFor="name" className="input-label">
+                      Machine Name
+                    </label>
+                    <input
+                      type="text"
+                      value={machineryName}
+                      onChange={(event) => setMachineryName(event.target.value)}
+                      name="name"
+                      className="input-box"
+                      placeholder="Enter Service Name"
+                    />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="BusinessName" className="input-label">
+                      Machine Rate
+                    </label>
+                    <input
+                      type="text"
+                      value={machineryRate}
+                      onChange={(event) => setMachineryRate(event.target.value)}
+                      name="name"
+                      className="input-box"
+                      placeholder="Enter Rate"
+                    />
+                  </div>
+
+                  <div
+                    className="btn-theme-5 md:w-[25%] w-full"
+                    onClick={handleMachines}
+                  >
+                    <span className="w-full h-full">Add Machine</span>
+                  </div>
+
+                  <div className="md:col-span-2 sm:col-span-1">
+                    <br />
+                    <div className="my-2">
+                      <h1 className="font-semibold text-lg ">
+                        Location Information
+                      </h1>
+                      <p className="text-[10px]">
+                        It is automatically picked up if not then please allow
+                        location for this website and refresh the page
+                      </p>
+                    </div>
+                    <hr />
+                  </div>
+                  <div className="flex flex-col">
+                    <label htmlFor="BusinessName" className="input-label">
+                      Latitude
+                    </label>
+                    <input
+                      type="text"
+                      value={lat}
+                      name="latitude"
+                      className="input-box"
+                      placeholder="Enter Latitude"
+                      required
+                    />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="longitude" className="input-label">
+                      Longitude
+                    </label>
+                    <input
+                      type="text"
+                      value={lon}
+                      name="longitude"
+                      className="input-box"
+                      placeholder="Enter Logitude"
+                      required
+                    />
+                  </div>
+
+                  <div className="flex items-center md:col-span-2 sm:col-span-1">
+                    <input type="checkbox" name="accept" required />
+                    <label
+                      htmlFor="accept"
+                      className="text-sm text-slate-600 font-medium"
+                    >
+                      I accept terms & conditions{" "}
+                      <a
+                        target={"_blank"}
+                        href="https://live-decor-frontend.vercel.app/terms-conditions"
+                        className="font-medium text-sm text-ascent-2"
+                      >
+                        (View)
+                      </a>
+                    </label>
+                  </div>
+
+                  {/* Submit Button */}
+                  <div>
+                    <button
+                      disabled={loading}
+                      type="submit"
+                      className="btn-theme-5 w-full"
+                    >
+                      <span className="w-full">
+                        {loading ? <Loader /> : "Register"}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </figure>
+            </div>
+          </form>
+        </div>
+      </section>
+    </React.Fragment>
+  );
+};
+
+export default Register;

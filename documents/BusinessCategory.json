@@ -1,0 +1,62 @@
+{
+  "BusinessCategory": [
+    {
+      "category": "जमीन सेवा (Land Development)",
+      "subCategory": [
+        "जमीन मोजणी (Land Mapping)",
+        "माती परीक्षण (Soil Testing)",
+        "जमीन विकास (Land Development)",
+        "कुंपण (Fencing)"
+      ]
+    },
+    {
+
+      "category":"सिंचन सेवा (Irrigation)",
+      "subCategory":[
+        "विहिर (Well)",
+        "बोअरवेल (Borewell)",
+        "शेत तलाव(Farm Pound)",
+        "ठिबक (Drips)",
+        "शिंपडा (Sprinkler)"
+      ]
+    },
+    {
+      "category": "विद्युत सेवा (Electric service)",
+      "subCategory": [
+        "सौर सेवा (Solar)",
+        "वीज सेवा(e]lectricity)",
+        "स्थापना आणि दुरुस्ती (Installation & Repairing)"
+      ]
+    },
+    {
+      "category": "पीक सेवा (Crop Services)",
+      "subCategory": [
+        "लागवड (Cultivation)",
+        "वृक्षारोपण (Plantation)",
+        " वृक्षारोपण (Harvesting)",
+        "फवारणी (Spraying)"
+      ]
+    },
+    {
+      "category": "कृषी निविष्ठा (Agricultural input)",
+      "subCategory": [
+        "बिया (Seeds)",
+        "खते (Fertilizers)",
+        "कीटकनाशके (Pestisides)",
+        "यंत्र (Machinary)",
+        "सेंद्रिय खते (Organic Fertilizers)"
+      
+      ]
+    },
+    {
+      "category": "व्यापार (Trade)",
+      "subCategory": [
+        "भाज्या (Vegitables)",
+        "फळे (Fruits)",
+        "तेल बिया (Oil Seeds)",
+        "तंतू (Fibers)"
+       
+      ]
+    }
+  ]
+}

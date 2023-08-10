@@ -1,6 +1,38 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import React from "react";
+import App from "next/app";
+import Head from "next/head";
+import "../styles/globals.css";
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+export default class MyApp extends App {
+  render() {
+    const { Component, pageProps } = this.props;
+
+    const Layout =
+      Component.layout ||
+      (({ children }: { children: JSX.Element }) => <>{children}</>);
+
+    return (
+      <React.Fragment>
+        <Head>
+          <title>Vendor | Live Decor</title>
+        </Head>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+
+        <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnHover={false}
+        />
+      </React.Fragment>
+    );
+  }
 }
