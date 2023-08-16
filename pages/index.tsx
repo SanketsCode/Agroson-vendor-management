@@ -237,7 +237,10 @@ const Register = () => {
           <form onSubmit={(event) => handleFormSubmit(event)}>
             <div className="md:w-full sm:w-full md:mx-auto md:py-2">
               <figure className="bg-white p-8 flex flex-col space-y-3 shadow-lg">
-                <img src="/assets/logo-dark.png" />
+                <img
+                  className="w-[500px] h-[400px] mx-auto"
+                  src="/assets/logo-dark.png"
+                />
                 <div>
                   <h1 className="font-semibold text-2xl mb-2">
                     Register as a Vendor
