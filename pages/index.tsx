@@ -34,6 +34,12 @@ const Register = () => {
   const [machineryRate, setMachineryRate] = useState("");
   const [machines, setMachines] = useState<MachineType[] | []>([]);
 
+  const Refresh = async () => {
+    await axios.get(`${process.env.NEXT_PUBLIC_API_PREFIX}`).then((res) => {
+      console.log(res);
+    });
+  };
+
   const [inputFields, setInputFields] = useState({
     name: "",
     email: "",
@@ -165,6 +171,7 @@ const Register = () => {
       setLat(position.coords.latitude);
       setLon(position.coords.longitude);
     });
+    Refresh();
   }, []);
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
