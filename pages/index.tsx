@@ -205,25 +205,19 @@ const Register = () => {
           setServices([]);
           setMachines([]);
 
-          setInputFields({
-            name: "",
-            email: "",
-            alternative_phone: "",
-            contact: "",
-            village: "",
-            taluka: "",
-            dist: "",
-            pincode: "",
-            state: "",
-            country: "",
-            machinery: machines,
-            services: services,
-            ServiceCategory: "",
-            ServiceSubCategory: "",
-          });
+          inputFields.name = "";
+          inputFields.contact = "";
+          inputFields.alternative_phone = "";
+          inputFields.email = "";
+          inputFields.machinery = [];
+          inputFields.services = [];
+          inputFields.ServiceCategory = "";
+          inputFields.ServiceSubCategory = "";
+          setLoading(false);
         }
       })
       .catch((error) => {
+        setLoading(false);
         toast.error("Email and Number Already exist");
       });
 
