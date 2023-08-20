@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { BusinessCategory } from "../documents/BusinessCategory.json";
+import { Maharashtra } from "@/documents/villages.json";
 
 import { countries } from "../documents/country-state.json";
 
@@ -22,6 +23,9 @@ interface MachineType {
 const Register = () => {
   const [country, setCountry] = useState<string[] | []>([]);
   const [state, setState] = useState<string[] | []>([]);
+  const [district, setDistricts] = useState<string[] | []>([]);
+  const [talukas, setTalukas] = useState<string[] | []>([]);
+  const [villages, setVillages] = useState<string[] | []>([]);
   const [categories, setCategories] = useState<string[] | []>([]);
   const [subCategories, setSubCategories] = useState<string[] | []>([]);
   const [lat, setLat] = useState<number>(0);
@@ -79,6 +83,58 @@ const Register = () => {
       });
       setState(result);
     }
+  };
+
+  const handleFilterDistrict = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setDistricts([]);
+    let newDist: string[] = [];
+    if (event.target.value === "Maharashtra") {
+      Maharashtra.map((dist_data) => {
+        newDist.push(dist_data.district);
+      });
+    }
+    setDistricts(newDist);
+  };
+
+  const handleFilterTaluka = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setTalukas([]);
+    let newTalukas: string[] = [];
+    if (inputFields.state === "Maharashtra") {
+      Maharashtra.map((dist_data) => {
+        console.log(event.target.value);
+
+        if (dist_data.district === event.target.value) {
+          console.log(dist_data.talukas);
+          dist_data.talukas.map((taluka_data) => {
+            newTalukas.push(taluka_data.taluka);
+          });
+        }
+      });
+    }
+    setTalukas(newTalukas);
+  };
+
+  const handleFilterVillages = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setVillages([]);
+    let Villages: string[] = [];
+    if (inputFields.state === "Maharashtra") {
+      Maharashtra.map((dist_data) => {
+        if (dist_data.district === inputFields.dist) {
+          dist_data.talukas.map((taluka_data) => {
+            if (taluka_data.taluka === event.target.value) {
+              taluka_data.villages.map((village) => {
+                Villages.push(village);
+              });
+            }
+          });
+        }
+      });
+    }
+    setVillages(Villages);
   };
 
   // for services
@@ -323,69 +379,6 @@ const Register = () => {
                     <hr />
                   </div>
 
-                  {/* Street */}
-                  <div className="flex flex-col">
-                    <label htmlFor="street" className="input-label">
-                      Village*
-                    </label>
-                    <input
-                      type="text"
-                      value={inputFields.village}
-                      onChange={(event) => handleInputChange(event)}
-                      name="village"
-                      className="input-box"
-                      placeholder="Enter village / area / locality"
-                      required
-                    />
-                  </div>
-
-                  {/* dist */}
-                  <div className="flex flex-col">
-                    <label htmlFor="city" className="input-label">
-                      District*
-                    </label>
-                    <input
-                      type="text"
-                      value={inputFields.dist}
-                      onChange={(event) => handleInputChange(event)}
-                      name="dist"
-                      className="input-box"
-                      placeholder="Enter District"
-                      required
-                    />
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label htmlFor="city" className="input-label">
-                      Taluka*
-                    </label>
-                    <input
-                      type="text"
-                      value={inputFields.taluka}
-                      onChange={(event) => handleInputChange(event)}
-                      name="taluka"
-                      className="input-box"
-                      placeholder="Enter Taluka"
-                      required
-                    />
-                  </div>
-
-                  {/* Pincode */}
-                  <div className="flex flex-col">
-                    <label htmlFor="pincode" className="input-label">
-                      Pincode*
-                    </label>
-                    <input
-                      type="text"
-                      value={inputFields.pincode}
-                      onChange={(event) => handleInputChange(event)}
-                      name="pincode"
-                      className="input-box"
-                      placeholder="Enter pincode"
-                      required
-                    />
-                  </div>
-
                   {/* Country */}
                   <div className="flex flex-col">
                     <label htmlFor="country" className="input-label">
@@ -420,7 +413,10 @@ const Register = () => {
                     <select
                       name="state"
                       className="input-box"
-                      onChange={(event) => handleInputChange(event)}
+                      onChange={(event) => {
+                        handleInputChange(event);
+                        handleFilterDistrict(event);
+                      }}
                       id="state"
                       required
                     >
@@ -433,6 +429,96 @@ const Register = () => {
                         );
                       })}
                     </select>
+                  </div>
+
+                  {/* dist */}
+                  <div className="flex flex-col">
+                    <label htmlFor="city" className="input-label">
+                      District*
+                    </label>
+                    <select
+                      value={inputFields.dist}
+                      onChange={(event) => {
+                        handleInputChange(event);
+                        handleFilterTaluka(event);
+                      }}
+                      name="dist"
+                      className="input-box"
+                      required
+                    >
+                      <option value="">Select District</option>
+                      {district.map((item, index) => {
+                        return (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="city" className="input-label">
+                      Taluka*
+                    </label>
+                    <select
+                      value={inputFields.taluka}
+                      onChange={(event) => {
+                        handleInputChange(event);
+                        handleFilterVillages(event);
+                      }}
+                      name="taluka"
+                      className="input-box"
+                      required
+                    >
+                      <option value="">Select Taluka</option>
+                      {talukas.map((item, index) => {
+                        return (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  {/* Village */}
+                  <div className="flex flex-col">
+                    <label htmlFor="street" className="input-label">
+                      Village*
+                    </label>
+                    <select
+                      value={inputFields.village}
+                      onChange={(event) => handleInputChange(event)}
+                      name="village"
+                      className="input-box"
+                      required
+                    >
+                      <option value="">Select Village</option>
+                      {villages.map((item, index) => {
+                        return (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  {/* Pincode */}
+                  <div className="flex flex-col">
+                    <label htmlFor="pincode" className="input-label">
+                      Pincode*
+                    </label>
+                    <input
+                      type="text"
+                      value={inputFields.pincode}
+                      onChange={(event) => handleInputChange(event)}
+                      name="pincode"
+                      className="input-box"
+                      placeholder="Enter pincode"
+                      required
+                    />
                   </div>
 
                   {/* Select Service  */}
