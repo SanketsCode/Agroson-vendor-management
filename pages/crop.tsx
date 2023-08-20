@@ -5,6 +5,12 @@ import { toast } from "react-toastify";
 import { BusinessCategory } from "../documents/BusinessCategory.json";
 
 import { countries } from "../documents/country-state.json";
+import {
+  handleFilterTaluka,
+  handleFilterDistrict,
+  handleFilterState,
+  handleFilterVillages,
+} from "@/common/Places";
 
 import Loader from "@/layout/Loader";
 
@@ -28,6 +34,9 @@ const CropRegistration = () => {
   const [machineryName, setMachineryName] = useState("");
   const [machineryRate, setMachineryRate] = useState("");
   const [machines, setMachines] = useState<MachineType[] | []>([]);
+  const [district, setDistricts] = useState<string[] | []>([]);
+  const [talukas, setTalukas] = useState<string[] | []>([]);
+  const [villages, setVillages] = useState<string[] | []>([]);
 
   const Refresh = async () => {
     await axios.get(`${process.env.NEXT_PUBLIC_API_PREFIX}`).then((res) => {
@@ -187,69 +196,6 @@ const CropRegistration = () => {
                     <hr />
                   </div>
 
-                  {/* Street */}
-                  <div className="flex flex-col">
-                    <label htmlFor="street" className="input-label">
-                      गाव*
-                    </label>
-                    <input
-                      type="text"
-                      value={inputFields.village}
-                      onChange={(event) => handleInputChange(event)}
-                      name="village"
-                      className="input-box"
-                      placeholder="गावाचे नाव"
-                      required
-                    />
-                  </div>
-
-                  {/* dist */}
-                  <div className="flex flex-col">
-                    <label htmlFor="city" className="input-label">
-                      जिल्हा*
-                    </label>
-                    <input
-                      type="text"
-                      value={inputFields.dist}
-                      onChange={(event) => handleInputChange(event)}
-                      name="dist"
-                      className="input-box"
-                      placeholder="जिल्हा"
-                      required
-                    />
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label htmlFor="city" className="input-label">
-                      तालुका*
-                    </label>
-                    <input
-                      type="text"
-                      value={inputFields.taluka}
-                      onChange={(event) => handleInputChange(event)}
-                      name="taluka"
-                      className="input-box"
-                      placeholder="तालुका"
-                      required
-                    />
-                  </div>
-
-                  {/* Pincode */}
-                  <div className="flex flex-col">
-                    <label htmlFor="pincode" className="input-label">
-                      पिनकोड*
-                    </label>
-                    <input
-                      type="text"
-                      value={inputFields.pincode}
-                      onChange={(event) => handleInputChange(event)}
-                      name="pincode"
-                      className="input-box"
-                      placeholder="पिनकोड"
-                      required
-                    />
-                  </div>
-
                   {/* Country */}
                   <div className="flex flex-col">
                     <label htmlFor="country" className="input-label">
@@ -284,7 +230,10 @@ const CropRegistration = () => {
                     <select
                       name="state"
                       className="input-box"
-                      onChange={(event) => handleInputChange(event)}
+                      onChange={(event) => {
+                        handleInputChange(event);
+                        handleFilterDistrict({ event, setDistricts });
+                      }}
                       id="state"
                       required
                     >
@@ -297,6 +246,100 @@ const CropRegistration = () => {
                         );
                       })}
                     </select>
+                  </div>
+
+                  {/* dist */}
+                  <div className="flex flex-col">
+                    <label htmlFor="city" className="input-label">
+                      जिल्हा*
+                    </label>
+                    <select
+                      value={inputFields.dist}
+                      onChange={(event) => {
+                        handleInputChange(event);
+                        handleFilterTaluka({ event, inputFields, setTalukas });
+                      }}
+                      name="dist"
+                      className="input-box"
+                      required
+                    >
+                      <option value="">--निवडा--</option>
+                      {district.map((item, index) => {
+                        return (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label htmlFor="city" className="input-label">
+                      तालुका*
+                    </label>
+                    <select
+                      value={inputFields.taluka}
+                      onChange={(event) => {
+                        handleInputChange(event);
+                        handleFilterVillages({
+                          event,
+                          inputFields,
+                          setVillages,
+                        });
+                      }}
+                      name="taluka"
+                      className="input-box"
+                      required
+                    >
+                      <option value="">--निवडा--</option>
+                      {talukas.map((item, index) => {
+                        return (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  {/* Street */}
+                  <div className="flex flex-col">
+                    <label htmlFor="street" className="input-label">
+                      गाव*
+                    </label>
+                    <select
+                      value={inputFields.village}
+                      onChange={(event) => handleInputChange(event)}
+                      name="village"
+                      className="input-box"
+                      required
+                    >
+                      <option value="">--निवडा--</option>
+                      {villages.map((item, index) => {
+                        return (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  {/* Pincode */}
+                  <div className="flex flex-col">
+                    <label htmlFor="pincode" className="input-label">
+                      पिनकोड*
+                    </label>
+                    <input
+                      type="text"
+                      value={inputFields.pincode}
+                      onChange={(event) => handleInputChange(event)}
+                      name="pincode"
+                      className="input-box"
+                      placeholder="पिनकोड"
+                      required
+                    />
                   </div>
 
                   {/* Select Crop  */}
