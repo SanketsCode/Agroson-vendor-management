@@ -2,13 +2,10 @@ import axios from "axios";
 
 import React, { useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { BusinessCategory } from "../documents/BusinessCategory.json";
-
 import { countries } from "../documents/country-state.json";
 import {
   handleFilterTaluka,
   handleFilterDistrict,
-  handleFilterState,
   handleFilterVillages,
 } from "@/common/Places";
 
@@ -418,7 +415,7 @@ const CropRegistration = () => {
                       एकर
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       value={inputFields.acre}
                       onChange={(event) => handleInputChange(event)}
                       name="acre"
@@ -432,7 +429,7 @@ const CropRegistration = () => {
                       गुंठा
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       value={inputFields.guntha}
                       onChange={(event) => handleInputChange(event)}
                       name="guntha"
