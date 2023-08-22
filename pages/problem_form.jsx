@@ -147,22 +147,23 @@ export default function Problem_Form() {
             <div className="md:w-full sm:w-full md:mx-auto md:py-2">
               <figure className="bg-white p-8 flex flex-col space-y-3 shadow-lg">
                 <img
-                  className="w-[500px] h-[400px] mx-auto"
+                  className="w-[300px] h-[200px]"
                   src="/assets/logo-dark.png"
                 />
                 <div>
                   <h1 className="font-semibold text-2xl mb-2">
-                    Tell Us Your Problem
+                    आम्हाला तुमची समस्या सांगा
                   </h1>
                   <p className="text-xs text-slate-600 mb-6">
-                    We Make Shure to solve your problem as soon as possible
+                    आम्ही शक्य तितक्या लवकर तुमची समस्या सोडवण्यासाठी प्रयत्न
+                    करतो
                   </p>
                 </div>
 
                 <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-6">
                   <div className="md:col-span-2 sm:col-span-1">
                     <br />
-                    <h1 className="font-semibold text-lg mb-2">Images</h1>
+                    <h1 className="font-semibold text-lg mb-2">प्रतिमा</h1>
                     <hr />
                   </div>
 
@@ -181,17 +182,11 @@ export default function Problem_Form() {
                       );
                     })}
 
-                  <div className="md:col-span-2 sm:col-span-1">
-                    <br />
-
-                    <hr />
-                  </div>
-
                   {pickedImages.length <= 3 && (
                     <div className="md:col-span-2 sm:col-span-1">
                       <div className="flex flex-col">
                         <label htmlFor="pincode" className="input-label">
-                          Upload Image
+                          प्रतिमा अपलोड करा
                         </label>
                         <input
                           type="file"
@@ -230,9 +225,7 @@ export default function Problem_Form() {
 
                   <div className="md:col-span-2 sm:col-span-1">
                     <br />
-                    <h1 className="font-semibold text-lg mb-2">
-                      Problem Details
-                    </h1>
+                    <h1 className="font-semibold text-lg mb-2">समस्या तपशील</h1>
                     <hr />
                   </div>
 
@@ -240,7 +233,7 @@ export default function Problem_Form() {
                   <div className="md:col-span-2 sm:col-span-1">
                     <div className="flex flex-col">
                       <label htmlFor="name" className="input-label">
-                        Problem title
+                        समस्या शीर्षक
                       </label>
 
                       <input
@@ -265,7 +258,7 @@ export default function Problem_Form() {
                   <div className="md:col-span-2 sm:col-span-1">
                     <div className="flex flex-col">
                       <label htmlFor="name" className="input-label">
-                        Problem Description
+                        समस्येचे वर्णन
                       </label>
                       <textarea
                         type="text"
@@ -288,7 +281,7 @@ export default function Problem_Form() {
                   <div className="md:col-span-2 sm:col-span-1">
                     <br />
                     <h1 className="font-semibold text-lg mb-2">
-                      Personal Information
+                      वैयक्तिक माहिती
                     </h1>
                     <hr />
                   </div>
@@ -296,7 +289,7 @@ export default function Problem_Form() {
                   {/* Farmer Name */}
                   <div className="flex flex-col">
                     <label htmlFor="name" className="input-label">
-                      Your name*
+                      तुमचे नाव*
                     </label>
                     <input
                       type="text"
@@ -312,7 +305,7 @@ export default function Problem_Form() {
                   {/* Phone Primary */}
                   <div className="flex flex-col">
                     <label htmlFor="primaryPhone" className="input-label">
-                      Mobile No.*
+                      तुमचा मोबाईल. क्रमांक*
                     </label>
                     <input
                       type="number"
@@ -327,9 +320,7 @@ export default function Problem_Form() {
 
                   <div className="md:col-span-2 sm:col-span-1">
                     <br />
-                    <h1 className="font-semibold text-lg mb-2">
-                      Address Information
-                    </h1>
+                    <h1 className="font-semibold text-lg mb-2">तुमचा पत्ता</h1>
                     <hr />
                   </div>
 

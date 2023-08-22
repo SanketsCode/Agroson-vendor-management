@@ -35,12 +35,14 @@ const CameraCapture = ({ pickedImages, setPickedImages }) => {
   return (
     <div className="space-y-3">
       <video id="camera-feed" autoPlay style={{ display: "hidden" }}></video>
-      <div className="btn-theme-5" onClick={handleCapture}>
-        <span className="w-full">Use Camera</span>
-      </div>
+      <div className="flex flex-row gap-5">
+        <div className="btn-theme-5 w-full" onClick={handleCapture}>
+          <span className="w-full">कॅमेरा चालू करा</span>
+        </div>
 
-      <div onClick={handleCaptureImage} className="btn-theme-5">
-        <span className="w-full">Capture Photo</span>
+        <div onClick={handleCaptureImage} className="btn-theme-5 w-full">
+          <span className="w-full">फोटो कॅप्चर करा</span>
+        </div>
       </div>
     </div>
   );

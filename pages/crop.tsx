@@ -35,12 +35,6 @@ const CropRegistration = () => {
   const [talukas, setTalukas] = useState<string[] | []>([]);
   const [villages, setVillages] = useState<string[] | []>([]);
 
-  const Refresh = async () => {
-    await axios.get(`${process.env.NEXT_PUBLIC_API_PREFIX}`).then((res) => {
-      console.log(res);
-    });
-  };
-
   const [inputFields, setInputFields] = useState({
     farmer_name: "",
     mobile_no: "",
@@ -85,7 +79,6 @@ const CropRegistration = () => {
       return country;
     });
     setCountry(data);
-    Refresh();
   }, []);
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

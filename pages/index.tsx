@@ -6,7 +6,7 @@ import { BusinessCategory } from "../documents/BusinessCategory.json";
 import { Maharashtra } from "@/documents/villages.json";
 
 import { countries } from "../documents/country-state.json";
-
+import { RefreshFunction } from "@/common/Refresh";
 import Loader from "@/layout/Loader";
 import ServiceCard from "@/components/serviceCard";
 
@@ -37,12 +37,6 @@ const Register = () => {
   const [machineryName, setMachineryName] = useState("");
   const [machineryRate, setMachineryRate] = useState("");
   const [machines, setMachines] = useState<MachineType[] | []>([]);
-
-  const Refresh = async () => {
-    await axios.get(`${process.env.NEXT_PUBLIC_API_PREFIX}`).then((res) => {
-      console.log(res);
-    });
-  };
 
   const [inputFields, setInputFields] = useState({
     name: "",
@@ -227,7 +221,8 @@ const Register = () => {
       setLat(position.coords.latitude);
       setLon(position.coords.longitude);
     });
-    Refresh();
+
+    RefreshFunction();
   }, []);
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
