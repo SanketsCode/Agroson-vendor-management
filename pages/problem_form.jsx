@@ -314,6 +314,7 @@ export default function Problem_Form() {
                       name="mobile_no"
                       className="input-box"
                       placeholder="Enter phone"
+                      maxLength={10}
                       required
                     />
                   </div>
