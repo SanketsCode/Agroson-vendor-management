@@ -2,6 +2,14 @@
 import { useState } from "react";
 
 const CameraCapture = ({ pickedImages, setPickedImages }) => {
+  const [facingMode, setFacingMode] = useState("environment"); // 'environment' for back camera, 'user' for front camera
+
+  const handleSwitchCamera = () => {
+    setFacingMode((prevFacingMode) =>
+      prevFacingMode === "environment" ? "user" : "environment"
+    );
+  };
+
   const handleCapture = async () => {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       console.log("getUserMedia is not supported");
@@ -21,11 +29,9 @@ const CameraCapture = ({ pickedImages, setPickedImages }) => {
     try {
       const constraints = {
         video: {
+          facingMode, // Use the currently selected facing mode
           width: { ideal: 1280 }, // Set preferred width if needed
           height: { ideal: 720 }, // Set preferred height if needed
-          facingMode: {
-            exact: "environment",
-          },
         },
       };
 
@@ -59,7 +65,10 @@ const CameraCapture = ({ pickedImages, setPickedImages }) => {
 
   return (
     <div className="space-y-3">
-      <video id="camera-feed" autoPlay style={{ display: "hidden" }}></video>
+      <video id="camera-feed" autoPlay style={{ display: "block" }}></video>
+      <div onClick={handleSwitchCamera} className="btn-theme-5 w-full">
+        <span className="w-full">Switch Camera</span>
+      </div>
       <div className="flex flex-row gap-5">
         <div className="btn-theme-5 w-full" onClick={handleCapture}>
           <span className="w-full">कॅमेरा चालू करा</span>
