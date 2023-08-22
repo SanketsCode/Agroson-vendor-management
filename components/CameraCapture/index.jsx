@@ -17,19 +17,42 @@ const CameraCapture = ({ pickedImages, setPickedImages }) => {
     }
   };
 
-  const handleCaptureImage = () => {
-    const video = document.getElementById("camera-feed");
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+  const handleCaptureImage = async () => {
+    try {
+      const constraints = {
+        video: {
+          facingMode: "environment", // Use 'environment' for the back camera
+          width: { ideal: 1280 }, // Set preferred width if needed
+          height: { ideal: 720 }, // Set preferred height if needed
+        },
+      };
 
-    canvas.toBlob((blob) => {
-      const file = new File([blob], "captured-image.jpg", {
-        type: "image/jpeg",
-      });
-      setPickedImages([...pickedImages, file]);
-    }, "image/jpeg");
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      const video = document.getElementById("camera-feed");
+      video.srcObject = stream;
+
+      video.onloadedmetadata = () => {
+        video.play();
+      };
+
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const context = canvas.getContext("2d");
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      canvas.toBlob((blob) => {
+        const file = new File([blob], "captured-image.jpg", {
+          type: "image/jpeg",
+        });
+        setPickedImages([...pickedImages, file]);
+
+        // Stop the camera stream
+        stream.getTracks().forEach((track) => track.stop());
+      }, "image/jpeg");
+    } catch (error) {
+      console.error("Error capturing image:", error);
+    }
   };
 
   return (
