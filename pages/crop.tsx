@@ -131,7 +131,7 @@ const CropRegistration = () => {
             <div className="md:w-full sm:w-full md:mx-auto md:py-2">
               <figure className="bg-white p-8 flex flex-col space-y-3 shadow-lg">
                 <img
-                  className="w-[500px] h-[400px] mx-auto"
+                  className="w-[300px] h-[200px]"
                   src="/assets/logo-dark.png"
                 />
                 <div>
