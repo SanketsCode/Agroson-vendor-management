@@ -21,9 +21,11 @@ const CameraCapture = ({ pickedImages, setPickedImages }) => {
     try {
       const constraints = {
         video: {
-          facingMode: "environment", // Use 'environment' for the back camera
           width: { ideal: 1280 }, // Set preferred width if needed
           height: { ideal: 720 }, // Set preferred height if needed
+          facingMode: {
+            exact: "environment",
+          },
         },
       };
 
