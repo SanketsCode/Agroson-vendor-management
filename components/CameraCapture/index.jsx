@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Webcam from "react-webcam";
 
 const CameraCapture = ({ pickedImages, setPickedImages }) => {
-  const [facingMode, setFacingMode] = useState("environment");
+  const [facingMode, setFacingMode] = useState("environment"); // 'environment' for back camera, 'user' for front camera
+  const webcamRef = useRef(null);
 
   const handleSwitchCamera = () => {
     setFacingMode((prevFacingMode) =>
@@ -10,42 +11,27 @@ const CameraCapture = ({ pickedImages, setPickedImages }) => {
     );
   };
 
-  const handleCaptureImage = async () => {
-    const constraints = {
-      video: {
-        facingMode,
-        width: { ideal: 1280 },
-        height: { ideal: 720 },
-      },
-    };
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      const video = document.getElementById("camera-feed");
-      video.srcObject = stream;
-
-      video.onloadedmetadata = () => {
-        video.play();
-      };
-
-      const canvas = document.createElement("canvas");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const context = canvas.getContext("2d");
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      canvas.toBlob((blob) => {
-        const file = new File([blob], "captured-image.jpg", {
-          type: "image/jpeg",
-        });
-        setPickedImages([...pickedImages, file]);
-
-        // Stop the camera stream
-        stream.getTracks().forEach((track) => track.stop());
-      }, "image/jpeg");
-    } catch (error) {
-      console.error("Error capturing image:", error);
+  const handleCaptureImage = () => {
+    const capturedImage = webcamRef.current.getScreenshot();
+    if (capturedImage) {
+      const blob = dataURItoBlob(capturedImage);
+      const file = new File([blob], "captured-image.jpg", {
+        type: "image/jpeg",
+      });
+      setPickedImages([...pickedImages, file]);
     }
+  };
+
+  // Helper function to convert data URI to Blob
+  const dataURItoBlob = (dataURI) => {
+    const byteString = atob(dataURI.split(",")[1]);
+    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
   };
 
   return (
@@ -53,8 +39,12 @@ const CameraCapture = ({ pickedImages, setPickedImages }) => {
       <Webcam
         id="camera-feed"
         audio={false}
-        videoConstraints={{ facingMode }}
-        style={{ display: "block" }}
+        mirrored={facingMode === "user"} // Mirror the image for front camera
+        ref={webcamRef}
+        screenshotFormat="image/jpeg"
+        videoConstraints={{
+          facingMode: facingMode,
+        }}
       />
 
       <div onClick={handleSwitchCamera} className="btn-theme-5 w-full">
