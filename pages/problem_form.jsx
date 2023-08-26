@@ -10,6 +10,7 @@ import CameraCapture from "../components/CameraCapture";
 import { RxCross1 } from "react-icons/rx";
 import Loader from "@/layout/Loader";
 import axios from "axios";
+import { RefreshFunction } from "@/common/Refresh";
 export default function Problem_Form() {
   const [country, setCountry] = useState([]);
   const [state, setState] = useState([]);
@@ -17,6 +18,7 @@ export default function Problem_Form() {
   const [talukas, setTalukas] = useState([]);
   const [villages, setVillages] = useState([]);
   const [loading, setLoading] = useState(false);
+
   //Custom Images
   const [pickedImages, setPickedImages] = useState([]);
   const [selectImage, setSelectImage] = useState(null);
@@ -65,6 +67,8 @@ export default function Problem_Form() {
       return country;
     });
     setCountry(data);
+
+    RefreshFunction();
   }, []);
 
   const handleFormSubmit = async (event) => {
@@ -192,7 +196,6 @@ export default function Problem_Form() {
                           type="file"
                           accept="image/png, image/jpg, image/webp, image/jpeg"
                           name="media"
-                          multiple
                           value={selectImage}
                           onChange={(event) => {
                             if (event.target.files.length === 0) {
@@ -205,7 +208,6 @@ export default function Problem_Form() {
                               setSelectImage(null);
                             }
                           }}
-                          required
                           className="input-box"
                         />
                       </div>
