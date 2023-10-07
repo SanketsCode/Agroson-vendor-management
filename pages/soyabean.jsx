@@ -193,7 +193,7 @@ export default function Soyabean() {
               value={inputFields.date}
               onChange={(event) => handleInputChange(event)}
               name="date"
-              className="text-xl px-7 py-4 font-medium text-black bg-white border border-[#378F00] rounded-lg focus:border-[#378F00]"
+              className="text-xl px-7 py-4 font-medium text-black bg-white border border-[#378F00] rounded-lg focus:border-[#378F00] w-full"
               placeholder="पिक काढणी तारीख"
               required
             />
