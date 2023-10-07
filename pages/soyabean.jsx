@@ -64,7 +64,7 @@ export default function Soyabean() {
       if (error.response) {
         toast.error(error.response.data.error);
       } else {
-        toast.error("Something Goes Wrong");
+        toast.error("काही वेळाने प्रयत्न करा");
       }
     }
   };
